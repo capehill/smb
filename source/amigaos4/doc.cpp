@@ -173,8 +173,8 @@ static SDL_bool alloc_resources()
 {
     SDL_bool result = SDL_FALSE;
 
-    printf("Fullscreen %d, vsync %d, renderer name '%s', filter %d\n",
-        fullscreen, vsync, renderer_name, filter);
+    printf("Fullscreen %d, vsync %d, filter %d\n",
+        fullscreen, vsync, filter);
 
     // ARGB(8888) surface
     SdlScreen = SDL_CreateRGBSurface(0, SCR_WIDTH, SCR_HEIGHT, 32,
@@ -207,6 +207,14 @@ static SDL_bool alloc_resources()
     {
         fprintf(stderr, "Couldn't create renderer: %s\n", SDL_GetError());
         goto out;
+    }
+
+    SDL_RendererInfo ri;
+
+    if (SDL_GetRendererInfo(SdlRenderer, &ri) == 0) {
+         printf("Renderer '%s' created\n", ri.name);
+    } else {
+        fprintf(stderr, "Failed to get renderer info: %s\n", SDL_GetError());
     }
 
     SdlTexture = SDL_CreateTexture(SdlRenderer, SDL_PIXELFORMAT_ARGB8888,
